@@ -13,10 +13,12 @@ const authenticationMiddleware = async (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         console.log(decoded);
+        const { id, username } = decoded;
+        req.user = { id, username };
+        next();
     } catch (error) {
         throw new CustomAPIError("Not authorized to access this route", 401);
     }
-    next();
 };
 
 module.exports = authenticationMiddleware;
